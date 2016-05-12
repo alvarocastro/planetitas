@@ -2,26 +2,22 @@ var path = require('path'),
 	webpack = require('webpack');
 
 module.exports = {
-	context: __dirname + '/',
+	debug: true,
+	devtool: 'source-map',
 
 	entry: [
 		//'./src/theme/main.less',
 		'./src/main.js'
 	],
-
 	output: {
-		publicPath: '/',
+		path: __dirname + '/dist',
 		filename: 'main.js'
 	},
-
-	debug: true,
-	devtool: 'source-map',
-
 	module: {
 		loaders: [
 			{
 				test: /\.js$/,
-				include: path.join(__dirname, 'src'),
+				//include: path.join(__dirname, 'src'),
 				loader: 'babel-loader',
 				query: {
 					presets: ['es2015'],
@@ -29,7 +25,10 @@ module.exports = {
 			}
 		]
 	},
+	resolve: {
+		extensions: ['', '.js', '.json'] 
+	},
 	devServer: {
 		contentBase: './src'
 	}
-}
+};
