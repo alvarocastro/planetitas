@@ -1,27 +1,16 @@
+import Channel from './channel.js';
+
 export default class Song {
 	constructor (instruments) {
 		this.instruments = instruments;
-		this.speed = 1 * 1000;
+		this.speed = .75;
 		this.length = 8;
-		this.step = 0;
-		this.interval;
 
-		var self = this;
-
-		/**
-		 * Array con instrumentos.
-		 * Cada instrumento es un array con los pasos.
-		 * Cada paso tiene un array con las notas a reproducir.
-		 */
-		this.notes = instruments.map(() => {
-			var notes = [];
-			for (var i = 0; i < self.length; i++) {
-				notes[i] = [];
-			}
-			return notes;
-		});
+		this.channels = this.instruments.map((instrument) => {
+			return new Channel(instrument, this.length, this.speed);
+		})
 	}
-
+/*
 	advanceStep () {
 		this.step = this.step === this.length - 1 ? 0 : this.step + 1;
 	}
@@ -51,30 +40,26 @@ export default class Song {
 		});
 	}
 
-	playInstrumentStep (step) {
+	playInstrumentStep (instrumentIndex, step) {
+		this.notes[instrumentIndex][step].forEach((note) => {
+			this.instruments[instrumentIndex].play(note);
+		});
 
+		this.instrumentInterval[instrumentIndex] = setTimeout(() => {
+			this.playInstrumentStep();
+		}, this.speed * this.instruments[instrumentIndex].duration);
 	}
-
+*/
 	play () {
-//*
-		console.group('> play step', this.step);
-
-		//this.notes[this.random(1)][this.step].push(this.random(9) + 1);
-
-		this.playStep(this.step);
-
-
-		this.advanceStep();
-		console.groupEnd();
-
-		this.interval = setTimeout(() => {
-			this.play();
-		}, this.speed);
-//*/
+		this.channels.forEach((channel) => {
+			channel.play();
+		});
 	}
 
 	stop () {
-		clearInterval(this.interval);
+		this.channels.forEach((channel) => {
+			channel.stop();
+		});
 	}
 
 	random (max) {

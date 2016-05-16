@@ -36,7 +36,7 @@ var piano = new Instrument([
 		})
 	], 9, 16);
 
-var s = new Song([piano]);
+var s = new Song([piano, violin]);
 
 setTimeout(function () {
 	s.play();
